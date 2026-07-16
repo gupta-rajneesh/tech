@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rajneesh Gupta — Certified(GenAI/GCP/AWS/CKA/Terraform) • Java (8/17/21) • Spring Boot (2.x/3.x) • Microservices • Kubernetes • Terraform • Helm • Istio</title>
+<meta name="description" content="Rajneesh Gupta — 17+ years building cloud native platforms, microservices and service mesh systems on GCP &amp; AWS.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #090d13;
+    --panel: #10161f;
+    --panel-2: #141c28;
+    --line: #212b3a;
+    --teal: #2dd4bf;
+    --teal-dim: rgba(45,212,191,0.14);
+    --amber: #f2a541;
+    --text: #e7ecf3;
+    --muted: #8b96a8;
+    --muted-2: #5c6779;
+    --radius: 10px;
+    --maxw: 1120px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1200px 600px at 85% -10%, rgba(45,212,191,0.07), transparent 60%),
+      radial-gradient(900px 500px at 5% 10%, rgba(242,165,65,0.05), transparent 55%),
+      var(--bg);
+    color:var(--text);
+    font-family:'Inter', system-ui, sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{ font-family:'Space Grotesk', sans-serif; margin:0; letter-spacing:-0.01em; }
+  .mono{ font-family:'JetBrains Mono', monospace; }
+  a{ color:inherit; }
+  .wrap{ max-width:var(--maxw); margin:0 auto; padding:0 28px; }
+  section{ padding:96px 0; border-top:1px solid var(--line); }
+  section:first-of-type{ border-top:none; }
+
+  ::selection{ background:var(--teal); color:#04110f; }
+  :focus-visible{ outline:2px solid var(--teal); outline-offset:3px; }
+
+  /* ---------- NAV ---------- */
+  .nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(9,13,19,0.82);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav .wrap{ display:flex; align-items:center; justify-content:space-between; padding-top:18px; padding-bottom:18px; }
+  .nav__brand{ display:flex; align-items:center; gap:10px; font-size:15px; font-weight:600; }
+  .nav__status{ display:flex; align-items:center; gap:7px; font-size:12px; color:var(--muted); }
+  .dot{ width:7px; height:7px; border-radius:50%; background:var(--teal); box-shadow:0 0 0 0 rgba(45,212,191,0.6); animation:pulse 2.4s infinite; }
+  @keyframes pulse{
+    0%{ box-shadow:0 0 0 0 rgba(45,212,191,0.55); }
+    70%{ box-shadow:0 0 0 8px rgba(45,212,191,0); }
+    100%{ box-shadow:0 0 0 0 rgba(45,212,191,0); }
+  }
+  .nav__links{ display:flex; align-items:center; gap:28px; font-size:14px; color:var(--muted); }
+  .nav__links a{ text-decoration:none; transition:color .15s ease; }
+  .nav__links a:hover{ color:var(--text); }
+  .nav__toggle{ display:none; }
+
+  /* ---------- NAV DROPDOWN (Articles mega-menu) ---------- */
+  .nav__dropdown{ position:relative; }
+  .nav__dropdown-trigger{
+    background:none; border:none; cursor:pointer; padding:0;
+    font-family:'Inter', system-ui, sans-serif; font-size:14px; color:var(--muted);
+    display:flex; align-items:center; gap:5px; transition:color .15s ease;
+  }
+  .nav__dropdown-trigger:hover{ color:var(--text); }
+  .nav__dropdown.is-open .nav__dropdown-trigger{ color:var(--teal); }
+  .nav__caret{ font-size:9px; transition:transform .15s ease; position:relative; top:1px; }
+  .nav__dropdown.is-open .nav__caret{ transform:rotate(180deg); }
+
+  .nav__dropdown-panel{
+    position:absolute; top:100%; right:-24px; padding-top:16px;
+    opacity:0; visibility:hidden; transform:translateY(4px);
+    transition:opacity .16s ease, transform .16s ease, visibility .16s;
+    z-index:60;
+  }
+  .nav__dropdown:hover .nav__dropdown-panel,
+  .nav__dropdown:focus-within .nav__dropdown-panel,
+  .nav__dropdown.is-open .nav__dropdown-panel{
+    opacity:1; visibility:visible; transform:translateY(0);
+  }
+  .nav__dropdown-inner{
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    padding:26px; display:grid; grid-template-columns:repeat(3, minmax(230px,1fr)); gap:36px;
+    width:max-content; max-width:min(860px, 92vw);
+    box-shadow:0 24px 60px rgba(0,0,0,0.5);
+  }
+  .nav__dd-heading{
+    font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--teal);
+    text-transform:uppercase; letter-spacing:.08em; margin:0 0 10px;
+  }
+  .nav__dd-heading.is-repeat{ margin-top:20px; }
+  .nav__dd-subheading{
+    font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted-2);
+    text-transform:uppercase; letter-spacing:.06em; margin:16px 0 8px;
+  }
+  .nav__dd-col a{
+    display:block; font-size:13px; line-height:1.45; color:var(--muted);
+    text-decoration:none; padding:6px 0; transition:color .15s ease;
+  }
+  .nav__dd-col a:hover{ color:var(--text); }
+
+  /* ---------- HERO ---------- */
+  .hero{ padding:64px 0 40px; border-top:none; }
+  .hero__grid{ display:grid; grid-template-columns:1.05fr 0.95fr; gap:40px; align-items:center; }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--teal);
+    background:var(--teal-dim); border:1px solid rgba(45,212,191,0.25);
+    padding:5px 10px; border-radius:99px; margin-bottom:22px;
+  }
+  .hero h1{ font-size:clamp(34px,4.4vw,54px); font-weight:600; line-height:1.08; }
+  .hero h1 span{ color:var(--teal); }
+  .hero__role{ margin-top:12px; font-size:17px; font-weight:500; color:var(--teal); }
+  .hero__sub{ margin-top:16px; font-size:17px; color:var(--muted); max-width:52ch; }
+  .hero__stats{ display:flex; gap:28px; margin-top:34px; flex-wrap:wrap; }
+  .stat b{ display:block; font-family:'Space Grotesk',sans-serif; font-size:24px; color:var(--text); }
+  .stat span{ font-size:12.5px; color:var(--muted-2); font-family:'JetBrains Mono',monospace; }
+  .hero__cta{ display:flex; gap:14px; margin-top:38px; flex-wrap:wrap; }
+  .btn{
+    font-family:'JetBrains Mono', monospace; font-size:13.5px; text-decoration:none;
+    padding:12px 20px; border-radius:8px; display:inline-flex; align-items:center; gap:8px;
+    transition:transform .15s ease, border-color .15s ease, background .15s ease;
+  }
+  .btn--solid{ background:var(--teal); color:#04120f; font-weight:600; }
+  .btn--solid:hover{ transform:translateY(-2px); }
+  .btn--ghost{ border:1px solid var(--line); color:var(--text); }
+  .btn--ghost:hover{ border-color:var(--teal); color:var(--teal); transform:translateY(-2px); }
+
+  .mesh{ width:100%; height:auto; }
+  .mesh text{ font-family:'JetBrains Mono', monospace; }
+  .mesh .edge{ stroke:var(--line); stroke-width:1.4; fill:none; }
+  .mesh .edge-flow{
+    stroke:var(--teal); stroke-width:1.6; fill:none; opacity:0.85;
+    stroke-dasharray:6 10; animation:flow 3.2s linear infinite;
+  }
+  @keyframes flow{ to{ stroke-dashoffset:-160; } }
+  .mesh .node-ring{ fill:var(--panel); stroke:var(--line); stroke-width:1.4; }
+  .mesh .node-ring.center{ fill:var(--teal-dim); stroke:var(--teal); }
+  .mesh .node-label{ fill:var(--muted); font-size:11px; }
+  .mesh .node-label.center{ fill:var(--text); font-size:13px; font-weight:600; }
+
+  /* ---------- ABOUT ---------- */
+  .section-head{ display:flex; align-items:baseline; gap:14px; margin-bottom:44px; }
+  .section-head .idx{ font-family:'JetBrains Mono', monospace; color:var(--teal); font-size:13px; }
+  .section-head h2{ font-size:28px; }
+  .about__grid{ display:grid; grid-template-columns:0.8fr 1.2fr; gap:56px; }
+  .about__panel{ background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:22px; }
+  .about__panel-title{ font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--muted-2); text-transform:uppercase; letter-spacing:.08em; margin-bottom:14px; }
+  .kv{ display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px solid var(--line); font-size:13.5px; }
+  .kv:last-child{ border-bottom:none; }
+  .kv b{ color:var(--muted); font-weight:500; }
+  .kv span{ font-family:'JetBrains Mono',monospace; color:var(--text); }
+  .about__text p{ color:var(--muted); font-size:15.5px; margin:0 0 16px; }
+  .about__text strong{ color:var(--text); font-weight:600; }
+
+  /* ---------- EXPERIENCE ---------- */
+  .timeline{
+    display:grid; grid-template-columns:repeat(2, 1fr); gap:18px 28px;
+    align-items:start;
+  }
+  .role{
+    position:relative; padding:20px 22px 20px 26px;
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+  }
+  .role::before{
+    content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+    background:var(--muted-2); border-radius:var(--radius) 0 0 var(--radius);
+  }
+  .role--current::before{ background:var(--teal); box-shadow:0 0 12px 0 rgba(45,212,191,0.5); }
+  .role__head{ display:flex; flex-wrap:wrap; align-items:baseline; gap:10px; margin-bottom:4px; }
+  .role__title{ font-size:17px; font-weight:600; font-family:'Space Grotesk',sans-serif; }
+  .role__badge{
+    font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--teal);
+    background:var(--teal-dim); border:1px solid rgba(45,212,191,0.25); padding:2px 8px; border-radius:99px;
+  }
+  .role__org{ color:var(--muted); font-size:14px; margin-bottom:2px; }
+  .role__meta{ font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--muted-2); margin-bottom:10px; }
+  .role__clients{ font-size:13px; color:var(--muted-2); }
+  .role__clients b{ color:var(--muted); font-weight:500; }
+
+  /* ---------- SKILLS ---------- */
+  .skills__group{ margin-bottom:30px; }
+  .skills__group h3{ font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--muted-2); text-transform:uppercase; letter-spacing:.08em; font-weight:500; margin-bottom:14px; }
+  .chips{ display:flex; flex-wrap:wrap; gap:10px; }
+  .chip{
+    font-family:'JetBrains Mono',monospace; font-size:12.5px; color:var(--text);
+    background:var(--panel); border:1px solid var(--line); border-radius:6px; padding:7px 11px;
+    transition:border-color .15s ease, color .15s ease;
+  }
+  .chip:hover{ border-color:var(--teal); color:var(--teal); }
+  .chip em{ font-style:normal; color:var(--muted-2); }
+  .chip:hover em{ color:var(--teal); opacity:0.7; }
+
+  /* ---------- CERTS / EDU ---------- */
+  .split{ display:grid; grid-template-columns:1fr 1fr; gap:56px; }
+  .cert-list, .edu-list{ list-style:none; margin:0; padding:0; }
+  .cert-list li, .edu-list li{ padding:14px 0; border-bottom:1px solid var(--line); font-size:14.5px; }
+  .cert-list li:last-child, .edu-list li:last-child{ border-bottom:none; }
+  .cert-list li b, .edu-list li b{ display:block; font-size:15px; margin-bottom:3px; }
+  .cert-list li span, .edu-list li span{ color:var(--muted-2); font-family:'JetBrains Mono',monospace; font-size:12px; }
+  .article-list{ max-width:760px; }
+  .article-list li a{ text-decoration:none; color:var(--text); transition:color .15s ease; }
+  .article-list li a:hover{ color:var(--teal); }
+  .article-list li a::before{ content:'→ '; color:var(--teal); }
+
+  /* ---------- CERT BANNER ---------- */
+  .cert-banner{
+    border:1px solid var(--line); border-radius:var(--radius);
+    background:var(--panel); padding:14px; margin-bottom:36px; overflow:hidden;
+  }
+  .cert-banner img{ display:block; width:100%; height:auto; border-radius:6px; }
+
+  /* ---------- FOOTER ---------- */
+  footer{ border-top:1px solid var(--line); padding:64px 0 40px; }
+  .footer__grid{ display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:30px; }
+  .footer__cta h2{ font-size:30px; max-width:14ch; }
+  .footer__links{ display:flex; gap:16px; flex-wrap:wrap; }
+  .footer__bottom{ margin-top:56px; display:flex; justify-content:space-between; color:var(--muted-2); font-size:12.5px; font-family:'JetBrains Mono',monospace; flex-wrap:wrap; gap:10px; }
+
+  .reveal{ opacity:0; transform:translateY(14px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  @media (max-width: 860px){
+    .hero__grid{ grid-template-columns:1fr; }
+    .about__grid{ grid-template-columns:1fr; }
+    .split{ grid-template-columns:1fr; }
+    .timeline{ grid-template-columns:1fr; }
+    .nav__links{ display:none; }
+    section{ padding:64px 0; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <div class="nav__brand">Rajneesh Gupta <span class="mono" style="color:var(--muted-2); font-weight:400;">/ Technology</span></div>
+    <div class="nav__links">
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#certifications">Certifications</a>
+      <div class="nav__dropdown">
+        <button class="nav__dropdown-trigger" type="button" aria-haspopup="true" aria-expanded="false">
+          Articles <span class="nav__caret">▾</span>
+        </button>
+        <div class="nav__dropdown-panel">
+          <div class="nav__dropdown-inner">
+            <div class="nav__dd-col">
+              <div class="nav__dd-heading">Claude</div>
+              <a href="https://blog.stackademic.com/claude-certified-architect-foundation-cca-f-complete-study-guide-fcfab5a7e612" target="_blank" rel="noopener">Cracking the Claude Certified Architect Foundation Exam (CCA-F): Study Guide, Domains, and Scenarios</a>
+              <a href="https://blog.stackademic.com/building-a-customer-support-resolution-agent-with-claude-ai-feff42778a99" target="_blank" rel="noopener">Scenario 1 — Building a Customer Support Resolution Agent with Claude AI</a>
+			  
+			  <a href="https://medium.com/@gupta.rajneesh2010/scenario-2-part-1-claude-certified-architect-foundation-8acb85016c7b" target="_blank" rel="noopener">Scenario 2 - Part 1 | Claude Certified Architect Foundation</a>
+			  <a href="https://medium.com/@gupta.rajneesh2010/scenario-3-claude-certified-architect-foundation-dd87d7647ff8" target="_blank" rel="noopener">Scenario 3 | Claude Certified Architect Foundation</a>
+			  <a href="https://medium.com/@gupta.rajneesh2010/scenario-4-claude-certified-architect-foundation-65228051ade3" target="_blank" rel="noopener">Scenario 4 | Claude Certified Architect Foundation</a>
+			  <a href="https://medium.com/@gupta.rajneesh2010/scenario-5-claude-certified-architect-foundation-d25d55f228b4" target="_blank" rel="noopener">Scenario 5 | Claude Certified Architect Foundation</a>
+			  <a href="https://medium.com/@gupta.rajneesh2010/scenario-6-claude-certified-architect-foundation-c6a6c7ccc15e" target="_blank" rel="noopener">Scenario 6 | Claude Certified Architect Foundation</a>
+			  <a href="https://medium.com/@gupta.rajneesh2010/claude-certified-architect-scenario-1-complete-guide-to-building-a-customer-support-agent-java-51ed05dd010b" target="_blank" rel="noopener">Claude Certified Architect Scenario 1: Complete Guide to Building a Customer Support Agent [Java]</a>
+			  <br>
+              <div class="nav__dd-heading">Google Gen AI</div>
+              <a href="https://medium.com/@gupta.rajneesh2010/google-cloud-generative-ai-leader-certification-2026-complete-study-guide-all-4-domains-018de5c6be9e?sharedUserId=gupta.rajneesh2010" target="_blank" rel="noopener">Google Cloud Generative AI Leader Certification (2026): Complete Study Guide — All 4 Domains</a>
+              <a href="https://medium.com/@gupta.rajneesh2010/choosing-the-right-gen-ai-solution-a-strategic-approach-5e89df37fe3c" target="_blank" rel="noopener">Choosing the Right Gen AI Solution: A Strategic Approach [6 Blog Series]</a>
+              <a href="https://medium.com/@gupta.rajneesh2010/face-recognition-login-system-b7f034b30f61" target="_blank" rel="noopener">AI-Powered Face Recognition with Java — A Complete Hands-On Series [12 Series Blogs]</a>
+            </div>
+            <div class="nav__dd-col">
+              <div class="nav__dd-heading">Enterprise Solution</div>
+              <a href="#" target="_blank" rel="noopener">A Real-World TCP Integration Pattern for FinTech Payment Systems, Telecom, and Legacy Enterprise [5 Series Blogs]</a>
+              <a href="#" target="_blank" rel="noopener">Building a Production-Grade FinTech Payment Platform Using Java, Spring Boot, Kafka, and Modern Architecture Patterns [5 Series of Blogs]</a>
+              <a href="#" target="_blank" rel="noopener">11 Liquibase Mistakes Developers Make (And How to Avoid Them)</a>
+            </div>
+            <div class="nav__dd-col">
+              <div class="nav__dd-heading">Kubernetes</div>
+              <a href="https://blog.stackademic.com/1-why-every-kubernetes-engineer-should-understand-service-mesh-08c6b358c08e?sharedUserId=gupta.rajneesh2010" target="_blank" rel="noopener">Why Every Kubernetes Engineer Should Understand Service Mesh</a>
+
+              <div class="nav__dd-heading is-repeat">MuleSoft</div>
+              <a href="#" target="_blank" rel="noopener">Enterprise Payment Integration Using MuleSoft + Spring Boot (Java 25) [10 Blog Series]</a>
+              <a href="https://medium.com/stackademic/part-1-mule-4-error-handling-series-5f5032bbb968?sharedUserId=gupta.rajneesh2010" target="_blank" rel="noopener">Mule 4 Error Handling Series [5 Blog Series]</a>
+
+              <div class="nav__dd-heading is-repeat">System Design</div>
+              <a href="#" target="_blank" rel="noopener">How Blinkit &amp; Zepto Deliver in 10 Minutes [11 Blog Series]</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="nav__status"><span class="dot"></span> Enskilling with Continous Learning</div>
+  </div>
+</nav>
+
+<header class="hero">
+
+  <div class="wrap hero__grid">
+    <div>
+      <div class="eyebrow">● India — 17+ yrs in Software Industry</div>
+      <h1>Rajneesh Gupta</h1>
+      <h3 class="hero__role">Specialized in digital transformation, cloud migration and production engineering.</h3>
+      <p class="hero__sub">· Senior Engineering Manager leading platform and product engineering, microservices, Kubernetes, service mesh, and the AI tooling now sitting alongside them. 
+	  <p class="hero__sub">· More than seventeen years across fintech,eCommerce, automotive, finance,  telecom, healthcare, and travel.</p>
+		<p class="hero__sub">· Strong experience on Microservice architecture with Spring Boot cloud GCP and GenAI.</p> 
+	<p class="hero__sub">· Excellent problem-solving skills with a strong technical background and good interpersonal skills</p>
+	<p class="hero__sub">· Flexible and versatile to adapt to any new environment and passionate to learn new cutting-edge technology stack</p>
+<br>
+      <div class="hero__stats">
+        <div class="stat"><b>17+</b><span>years in production</span></div>
+        <div class="stat"><b>7+</b><span>organisations</span></div>
+        <div class="stat"><b>2</b><span>clouds — GCP / AWS </span></div>
+        <div class="stat"><b>6</b><span>industry domains</span></div>
+      </div>
+      <div class="hero__cta">
+        <a class="btn btn--solid" href="mailto:career.rajneesh@gmail.com">mail</a>
+        <a class="btn btn--ghost" href="https://www.linkedin.com/in/rajneeshkgupta" target="_blank" rel="noopener">linkedin →</a>
+        <a class="btn btn--ghost" href="https://medium.com/@gupta.rajneesh2010" target="_blank" rel="noopener">read the blog →</a>
+      </div>
+    </div>
+
+    <div><div class="cert-banner reveal">
+      <img src="certifications-banner.jpg" alt="Certification badges: Google Cloud Generative AI Leader, Google Cloud Certified Professional Cloud Architect, AWS Certified Solutions Architect Associate, HashiCorp Certified Terraform Associate, and Certified Kubernetes Administrator (CKA)" loading="lazy" style="width: 100%; height: 125px;">
+    </div>
+      <svg class="mesh" viewBox="0 0 560 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram showing Rajneesh at the centre of a service mesh connected to Kubernetes, Istio, Spring Boot, GCP and AWS, GenAI, and Java">
+        <!-- edges (static) -->
+        <path class="edge" d="M280,260 L280,70"/>
+        <path class="edge" d="M280,260 L470,150"/>
+        <path class="edge" d="M280,260 L470,370"/>
+        <path class="edge" d="M280,260 L280,450"/>
+        <path class="edge" d="M280,260 L90,370"/>
+        <path class="edge" d="M280,260 L90,150"/>
+        <!-- edges (animated flow) -->
+        <path class="edge-flow" d="M280,260 L280,70"/>
+        <path class="edge-flow" d="M280,260 L470,150"/>
+        <path class="edge-flow" d="M280,260 L470,370"/>
+        <path class="edge-flow" d="M280,260 L280,450"/>
+        <path class="edge-flow" d="M280,260 L90,370"/>
+        <path class="edge-flow" d="M280,260 L90,150"/>
+
+        <!-- satellite nodes -->
+        <g>
+          <circle class="node-ring" cx="280" cy="70" r="34"/>
+          <text class="node-label" x="280" y="66" text-anchor="middle">Kubernetes</text>
+          <text class="node-label" x="280" y="80" text-anchor="middle"> · Helm</text>
+        </g>
+        <g>
+          <circle class="node-ring" cx="470" cy="150" r="34"/>
+          <text class="node-label" x="470" y="146" text-anchor="middle">Istio</text>
+          <text class="node-label" x="470" y="160" text-anchor="middle">Service Mesh</text>
+        </g>
+        <g>
+          <circle class="node-ring" cx="470" cy="370" r="34"/>
+          <text class="node-label" x="470" y="366" text-anchor="middle">Google · AWS</text>
+          <text class="node-label" x="470" y="380" text-anchor="middle">Terraform</text>
+        </g>
+        <g>
+          <circle class="node-ring" cx="280" cy="450" r="34"/>
+          <text class="node-label" x="280" y="446" text-anchor="middle">GenAI</text>
+          <text class="node-label" x="280" y="460" text-anchor="middle">Claude · Cursor · Copilot</text>
+        </g> 
+        <g>
+          <circle class="node-ring" cx="90" cy="370" r="34"/>
+          <text class="node-label" x="90" y="366" text-anchor="middle">Spring Boot</text>
+          <text class="node-label" x="90" y="380" text-anchor="middle">Microservices</text>
+        </g>
+        <g>
+          <circle class="node-ring" cx="90" cy="150" r="34"/>
+          <text class="node-label" x="90" y="146" text-anchor="middle">Java</text>
+          <text class="node-label" x="90" y="160" text-anchor="middle">17 · 21 · 25</text>
+        </g>
+
+        <!-- center node -->
+        <circle class="node-ring center" cx="280" cy="260" r="64"/>
+        <text class="node-label center" x="280" y="256" text-anchor="middle">Rajneesh Gupta</text>
+        <text class="node-label" x="280" y="274" text-anchor="middle" style="fill:var(--teal); font-size:10px;">Skills</text>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<section id="about">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="idx">01</span>
+      <h2>About</h2>
+    </div>
+    <div class="about__grid">
+      <div class="about__panel reveal">
+        <div class="about__panel-title">Snapshot</div>
+        <div class="kv"><b>Based in</b><span>India</span></div>
+        <div class="kv"><b>Current role</b><span>Sr. Engineering Manager - Tech</span></div>
+        <div class="kv"><b>Focus</b><span>Platform &amp; Product Eng.</span></div>
+        <div class="kv"><b>Languages</b><span>EN, HI</span></div>
+        <div class="kv"><b>Contact</b><span>career.rajneesh@gmail.com</span></div>
+      </div>
+      <div class="about__text reveal">
+        <p><strong>Around 17+ years</strong> in cloud native, distributed, and multi-tier architecture — spanning eCommerce, automotive, finance, telecom, healthcare and travel. The common thread across every one of those domains: taking a monolith or a fragile integration layer and turning it into something a team can actually operate at 2am without dread.</p>
+        <p>The last few years have centred on <strong>Spring Boot microservices on GCP</strong>, with deep hands-on time in <strong>Kubernetes, Helm and Istio</strong> — running service mesh in production, not just diagramming it. Recent focus has extended into <strong>applied GenAI tooling</strong> (Claude, Spring AI, CrewAI, Cursor, GitHub Copilot), bringing the same platform-engineering discipline to how teams build with AI day-to-day.</p>
+        <p>Comfortable moving between the architecture whiteboard, a production incident, and a 1:1 with a report — currently leading engineering as a people manager while staying close enough to the stack to be useful in a design review.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="idx">02</span>
+      <h2>Experience</h2>
+    </div>
+    <div class="timeline">
+
+      <div class="role role--current reveal">
+        <div class="role__head">
+          <span class="role__title">Senior Engineering Manager</span>
+          <span class="role__badge">current</span>
+        </div>
+        <div class="role__org">Altimetrik — Product &amp; Platform Engineering</div>
+        <div class="role__meta mono">Jan 2023 — Present · India · 3 mos</div>
+        <div class="role__clients"><b>Client:</b> Paysafe | VISA</div>
+      </div>
+
+      <div class="role reveal">
+        <div class="role__head"><span class="role__title">Associate Technical Architect</span></div>
+        <div class="role__org">Intersoft Data Labs</div>
+        <div class="role__meta mono">Aug 2020 — Jan 2023 · Gurugram · 2 yrs 6 mos</div>
+        <div class="role__clients"><b>Client:</b> BedBathAndBeyond</div>
+      </div>
+
+      <div class="role reveal">
+        <div class="role__head"><span class="role__title">Associate Principal Engineer</span></div>
+        <div class="role__org">Nagarro</div>
+        <div class="role__meta mono">Jan 2018 — Jul 2020 · Gurgaon · 2 yrs 7 mos</div>
+        <div class="role__clients"><b>Clients:</b> MSIL, Ericsson</div>
+      </div>
+
+      <div class="role reveal">
+        <div class="role__head"><span class="role__title">Senior Associate Technology L2</span></div>
+        <div class="role__org">Publicis.Sapient</div>
+        <div class="role__meta mono">Sep 2016 — Dec 2017 · Bengaluru · 1 yr 4 mos</div>
+        <div class="role__clients"><b>Client:</b> Fidelity Investments</div>
+      </div>
+
+      <div class="role reveal">
+        <div class="role__head"><span class="role__title">Module Lead</span></div>
+        <div class="role__org">IGT Solutions</div>
+        <div class="role__meta mono">Sep 2014 — Sep 2016 · Gurgaon · 2 yrs 1 mo</div>
+        <div class="role__clients"><b>Client:</b> SITA</div>
+      </div>
+
+      <div class="role reveal">
+        <div class="role__head"><span class="role__title">Senior Software Engineer</span></div>
+        <div class="role__org">Sapient Global Markets</div>
+        <div class="role__meta mono">Dec 2011 — Dec 2013 · Gurugram · 2 yrs 1 mo</div>
+      </div>
+
+      <div class="role reveal">
+        <div class="role__head"><span class="role__title">Software Developer</span></div>
+        <div class="role__org">TEKsystems · Polaris · Satyam</div>
+        <div class="role__meta mono">Nov 2007 — Nov 2011 · Delhi NCR / Mumbai / Hyderabad · 4 yrs 1 mo</div>
+        <div class="role__clients">Core Java, Spring, Hibernate and Struts across multiple client engagements.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="idx">03</span>
+      <h2>Skills</h2>
+    </div>
+
+    <div class="skills__group reveal">
+      <h3>lang &amp; framework</h3>
+      <div class="chips">
+        <span class="chip"><em>lang:</em> Java-21</span>
+        <span class="chip"><em>fw:</em> Spring-boot-3.x</span>
+        <span class="chip"><em>fw:</em> Spring-cloud</span>
+        <span class="chip"><em>fw:</em> Spring-batch</span>
+        <span class="chip"><em>fw:</em> Spring-integration</span>
+		<span class="chip"><em>fw:</em> MuleSoft</span>
+      </div>
+    </div>
+
+    <div class="skills__group reveal">
+      <h3>cloud &amp; infra</h3>
+      <div class="chips">
+        <span class="chip"><em>cloud:</em> GCP</span>
+        <span class="chip"><em>cloud:</em> AWS</span>
+        <span class="chip"><em>orch:</em> Kubernetes</span>
+        <span class="chip"><em>orch:</em> Docker</span>
+        <span class="chip"><em>orch:</em> Helm</span>
+        <span class="chip"><em>mesh:</em> Istio</span>
+        <span class="chip"><em>iac:</em> Terraform</span>
+      </div>
+    </div>
+
+    <div class="skills__group reveal">
+      <h3>data &amp; messaging</h3>
+      <div class="chips">
+        <span class="chip"><em>db:</em> MySQL</span>
+        <span class="chip"><em>db:</em> OLracle</span>
+        <span class="chip"><em>cache:</em> Redis</span>
+        <span class="chip"><em>stream:</em> Kafka</span>
+      </div>
+    </div>
+
+    <div class="skills__group reveal">
+      <h3>ai tooling</h3>
+      <div class="chips">
+        <span class="chip"><em>ai:</em> Claude</span>
+        <span class="chip"><em>ai:</em> Spring-AI</span>
+        <span class="chip"><em>ai:</em> CrewAI</span>
+        <span class="chip"><em>ai:</em> Cursor</span>
+        <span class="chip"><em>ai:</em> Github Copilot</span>
+      </div>
+    </div>
+
+    <div class="skills__group reveal">
+      <h3>ops &amp; delivery</h3>
+      <div class="chips">
+		<span class="chip"><em>ci:</em> GitLab</span>
+        <span class="chip"><em>ci:</em> Jenkins</span>
+        <span class="chip"><em>obs:</em> New Relic</span>
+        <span class="chip"><em>tracking:</em> Jira</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="certifications">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="idx">04</span>
+      <h2>Certifications &amp; Education</h2>
+    </div>
+
+    <div class="split">
+      <ul class="cert-list reveal">
+        <li><b>Generative AI Leader</b><span>Google Cloud Certified</span></li>
+        <li><b>Cloud Architect</b><span>Google Cloud Certified · Professional</span></li>
+        <li><b>AWS Certified Solutions Architect — Associate</b><span>Amazon Web Services</span></li>
+        <li><b>HashiCorp Certified: Terraform Associate</b><span>HashiCorp</span></li>
+        <li><b>Certified Kubernetes Administrator (CKA)</b><span>Cloud Native Computing Foundation</span></li>
+      </ul>
+      <ul class="edu-list reveal">
+        <li><b>Master of Computer Applications (MCA)</b><span>Amity Online · Computer Science · 2023 – 2025</span></li>
+        <li><b>Bachelor's Degree</b><span>Veer Bahadur Singh Purvanchal University · Mathematics · 2000 – 2002</span></li>
+        <li><b>Diploma</b><span>DOEACC · Computer &amp; Information Sciences · 2003 – 2006</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="article">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="idx">05</span>
+      <h2>Articles/Blogs</h2>
+    </div>
+    <ul class="cert-list article-list reveal">
+      <li><a target="_blank" href="https://blog.stackademic.com/end-to-end-system-design-from-transaction-processing-to-settlement-ledger-and-reconciliation-5-75aa2ed580ea?sharedUserId=gupta.rajneesh2010">End-to-End System Transaction Processing [5 Phases of Series]</a></li>
+      <li><a target="_blank" href="https://medium.com/stackademic/part-1-mule-4-error-handling-series-5f5032bbb968?sharedUserId=gupta.rajneesh2010">Mule 4 Error Handling Series</a></li>
+      <li><a target="_blank" href="https://blog.stackademic.com/1-why-every-kubernetes-engineer-should-understand-service-mesh-08c6b358c08e?sharedUserId=gupta.rajneesh2010">Why Every Kubernetes Engineer Should Understand Service Mesh</a></li>
+      <li><a target="_blank" href="https://medium.com/@gupta.rajneesh2010/google-cloud-generative-ai-leader-certification-2026-complete-study-guide-all-4-domains-018de5c6be9e?sharedUserId=gupta.rajneesh2010">Google Cloud Generative AI Leader Certification (2026)</a></li>
+    </ul>
+  </div>
+</section>
+  
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div class="footer__cta reveal">
+        <h2>Let's route some traffic your way.</h2>
+      </div>
+      <div class="footer__links reveal">
+        <a class="btn btn--solid" href="mailto:career.rajneesh@gmail.com">career.rajneesh@gmail.com</a>
+        <a class="btn btn--ghost" href="https://www.linkedin.com/in/rajneeshkgupta" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn btn--ghost" href="https://medium.com/@gupta.rajneesh2010" target="_blank" rel="noopener">Blog</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>Rajneesh Gupta - India</span>
+      <span>&copy; All Rights Reserved 2026</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // nav dropdown (Articles mega-menu)
+  document.querySelectorAll('.nav__dropdown').forEach((dd) => {
+    const trigger = dd.querySelector('.nav__dropdown-trigger');
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const willOpen = !dd.classList.contains('is-open');
+      document.querySelectorAll('.nav__dropdown.is-open').forEach((open) => {
+        open.classList.remove('is-open');
+        open.querySelector('.nav__dropdown-trigger').setAttribute('aria-expanded', 'false');
+      });
+      if (willOpen) {
+        dd.classList.add('is-open');
+        trigger.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.nav__dropdown.is-open').forEach((open) => {
+      open.classList.remove('is-open');
+      open.querySelector('.nav__dropdown-trigger').setAttribute('aria-expanded', 'false');
+    });
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.nav__dropdown.is-open').forEach((open) => {
+        open.classList.remove('is-open');
+        open.querySelector('.nav__dropdown-trigger').setAttribute('aria-expanded', 'false');
+      });
+    }
+  });
+
+  // scroll reveal
+  const els = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    els.forEach(el => io.observe(el));
+  } else {
+    els.forEach(el => el.classList.add('in'));
+  }
+</script>
+
+</body>
+</html>
