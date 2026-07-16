@@ -238,8 +238,26 @@
     .about__grid{ grid-template-columns:1fr; }
     .split{ grid-template-columns:1fr; }
     .timeline{ grid-template-columns:1fr; }
-    .nav__links{ display:none; }
     section{ padding:64px 0; }
+
+    .nav__toggle{
+      display:flex; align-items:center; justify-content:center;
+      background:none; border:1px solid var(--line); border-radius:6px;
+      color:var(--text); font-size:18px; width:38px; height:38px; cursor:pointer;
+    }
+    .nav .wrap{ flex-wrap:wrap; }
+    .nav__links{
+      display:none; flex-direction:column; align-items:flex-start; gap:16px;
+      width:100%; padding:18px 0 6px; border-top:1px solid var(--line);
+    }
+    .nav.is-open .nav__links{ display:flex; }
+    .nav__dropdown{ width:100%; }
+    .nav__dropdown-panel{ position:static; opacity:1; visibility:visible; transform:none; padding-top:10px; display:none; }
+    .nav__dropdown.is-open .nav__dropdown-panel{ display:block; }
+    .nav__dropdown-inner{
+      display:flex; flex-direction:column; gap:18px; width:100%; max-width:none;
+      box-shadow:none; border:none; background:transparent; padding:0 0 0 12px;
+    }
   }
   @media (prefers-reduced-motion: reduce){
     *{ animation:none !important; transition:none !important; }
@@ -251,6 +269,7 @@
 <nav class="nav">
   <div class="wrap">
     <div class="nav__brand">Rajneesh Gupta <span class="mono" style="color:var(--muted-2); font-weight:400;">/ Technology</span></div>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
     <div class="nav__links">
       <a href="#about">About</a>
       <a href="#experience">Experience</a>
@@ -603,6 +622,18 @@
 </footer>
 
 <script>
+  // mobile menu toggle
+  const navEl = document.querySelector('.nav');
+  const navToggle = document.querySelector('.nav__toggle');
+  navToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    navEl.classList.toggle('is-open');
+    navToggle.setAttribute('aria-expanded', navEl.classList.contains('is-open'));
+  });
+  document.querySelectorAll('.nav__links > a').forEach((a) => {
+    a.addEventListener('click', () => navEl.classList.remove('is-open'));
+  });
+
   // nav dropdown (Articles mega-menu)
   document.querySelectorAll('.nav__dropdown').forEach((dd) => {
     const trigger = dd.querySelector('.nav__dropdown-trigger');
